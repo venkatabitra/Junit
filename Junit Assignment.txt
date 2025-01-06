@@ -1,0 +1,111 @@
+package junit1;
+
+import static org.junit.Assert.assertEquals;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Set;
+
+import org.junit.After;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+
+public class junitassignment{
+		public static void main(String[] args) throws MalformedURLException {
+		WebDriver driver = new FirefoxDriver();
+		RemoteWebDriver driver1;
+
+		 DesiredCapabilities capabilities = new DesiredCapabilities();
+		
+	     capabilities.setCapability("browserName", "FirefoxDriver");
+	     capabilities.setCapability("browserVersion", "130.0");
+	     capabilities.setCapability("browserOptions", "Windows 11");
+		FirefoxDriver browserOptions = new FirefoxDriver();
+		 
+		 HashMap<String, Object> ltOptions = new HashMap<String, Object>();
+		 ltOptions.put("username", "venkata_bitra");
+		 ltOptions.put("accessKey", "kW6IT800aAmwpqKTLrPr8aQuOJjmtixrA77KqXKfmJ8qIKj5vo");
+		 ltOptions.put("visual", true);
+		 ltOptions.put("video", true);
+		 ltOptions.put("headless", true);
+		 ltOptions.put("seCdp", true);
+		 ltOptions.put("network", true);
+		 ltOptions.put("project", "Untitled");
+		 ltOptions.put("name", "JunitAssignement");
+		 ltOptions.put("tunnel", true);
+		 ltOptions.put("w3c", true);
+		 ltOptions.put("plugin", "java-junit");
+		 
+		 	   	     
+	    	 driver1 = new RemoteWebDriver(new URL("http://venkata_bitra:kW6IT800aAmwpqKTLrPr8aQuOJjmtixrA77KqXKfmJ8qIKj5vo@hub.lambdatest.com/wd/hub"),
+	    	    	 capabilities);
+	    	 //Test Scenario 1:
+	    	 //1. Navigate to https://lambdatest.com/selenium-playground/.
+		 driver.get("https://lambdatest.com/selenium-playground/");
+		 //2. Perform an explicit wait till the time all the elements in the DOM are available.
+		 WebDriverWait wait = new WebDriverWait(driver, 10);
+		 wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.tagName("body")));
+		// 3. Click “Radio Buttons Demo”.
+		 WebElement radioButtonDemo = driver.findElement(By.linkText("Radio Buttons Demo"));
+		 	        radioButtonDemo.click();
+		 // 4. Under the “Click on button to get the selected value.” section, select “Female”.        
+	        WebElement femaleRadioButton = driver.findElement(By.xpath("//input[@name='gender' and @value='Female']"));
+	        femaleRadioButton.click();
+	       // 5. Then click the “Get value” button.
+	        WebElement getValueButton = driver.findElement(By.id("buttoncheck"));
+	        getValueButton.click();
+	       // 6. Now read the text message printed and validate the message printed is “Radio button 'Female' is checked”.
+	        WebElement message = driver.findElement(By.className("radiobutton"));
+	        String expectedMessage = "Radio button 'Female' is checked";
+	        assertEquals(expectedMessage, message.getText());
+	        driver.quit();
+	        //Test Scenario 2:
+	        
+	        // Step 1: Navigate to the URL 
+			 driver.get("https://lambdatest.com/selenium-playground/"); 
+			 // Step 2: Perform an explicit wait till all elements are available
+			// WebDriverWait wait = new WebDriverWait(driver, 10);
+			 // 10 seconds wait 
+			 wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.tagName("body"))); 
+			 // Step 3: Click “Window Popup Modal” 
+			 WebElement windowPopupLink = driver.findElement(By.linkText("Window Popup Modal")); 
+			 windowPopupLink.click(); 
+			 // Step 4: Click the “Follow On Twitter” button 
+			 wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Follow On Twitter"))).click(); 
+			 // Step 5: Validate that a new window is opened using the Window Handle ID 
+			 String mainWindowHandle = driver.getWindowHandle(); 
+			 System.out.println("Main Window Handle: " + mainWindowHandle);
+			 driver.findElement(By.id("openNewWindowButton")).click();
+			 Set<String> allWindowHandles = driver.getWindowHandles();
+			 if (allWindowHandles.size() > 1) 
+			 { 
+				 System.out.println("New window has been opened."); 
+				 }
+			 else
+			 { 
+				 System.out.println("No new window opened."); 
+				 }
+			 
+			 for (String handle : allWindowHandles) 
+			 {
+if (!handle.equals(mainWindowHandle))
+{ 
+	driver.switchTo().window(handle);
+	System.out.println("Switched to new window with handle: " + handle);
+	} }
+		
+			 // Step 6: Close all windows with a single command driver.quit();
+			 		 
+	driver.quit();
+	    
+	 }
+   }
+
