@@ -1,0 +1,80 @@
+	package newversion1;
+	import org.openqa.selenium.By;
+	import org.openqa.selenium.WebDriver;
+	import org.openqa.selenium.WebElement;
+	import org.openqa.selenium.chrome.ChromeDriver;
+	import org.openqa.selenium.chrome.ChromeOptions;
+	import org.openqa.selenium.firefox.FirefoxDriver;
+	import org.openqa.selenium.remote.DesiredCapabilities;
+	import org.openqa.selenium.remote.RemoteWebDriver;
+	import org.openqa.selenium.support.ui.Duration;
+	import org.openqa.selenium.support.ui.ExpectedConditions;
+	import org.openqa.selenium.support.ui.WebDriverWait;
+	import org.testng.annotations.BeforeMethod;
+	import org.testng.annotations.Test;
+
+	import static org.junit.Assert.assertEquals;
+
+	import java.net.MalformedURLException;
+	import java.net.URL;
+	import java.util.Set;
+	import java.util.concurrent.TimeUnit;
+
+	public class JunitAssignment2 {
+		//WebDriver driver = new FirefoxDriver();
+		WebDriver driver;
+		WebDriverWait wait;
+
+		@BeforeMethod
+		public void setUp() {
+			System.setProperty("webdriver.chrome.driver", "D://ChromeDiver//chromedriver.exe");
+			driver = new ChromeDriver();
+			driver.manage().window().maximize();
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			
+			DesiredCapabilities capabilities = new DesiredCapabilities();
+			try {
+				driver = new RemoteWebDriver(new URL("http:// venkata_bitra: kW6IT800aAmwpqKTLrPr8aQuOJjmtixrA77KqXKfmJ8qIKj5vo@hub.lambdatest.com/wd/hub"),
+				 capabilities);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+
+		@Test
+		public void Testing() {
+			
+			// Set the path to your ChromeDriver
+			//System.setProperty("webdriver.chrome.driver", "D://ChromeDiver//chromedriver.exe");
+
+			// 1. Navigate to the URL
+			driver.get("https://lambdatest.com/selenium-playground/");
+			//WebDriverWait wait = new WebDriverWait(driver, 100);
+			// 2. Perform an explicit wait till the time all the elements in the DOM are available
+			//wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.tagName("body")));
+
+			// 3. Click “Window Popup Modal”
+			WebElement windowPopupLink = driver.findElement(By.linkText("Window Popup Modal"));
+			windowPopupLink.click();
+
+			// 4. Click the “Follow On Twitter” button
+			WebElement followTwitterButton = driver.findElement(By.xpath("//a[contains(text(),'Follow On Twitter')]"));
+			followTwitterButton.click();
+
+			// 5. Validate that a new window is opened using the Window Handle ID
+			String originalWindow = driver.getWindowHandle();
+			Set<String> allWindows = driver.getWindowHandles();
+
+			for (String windowHandle : allWindows) {
+				if (!windowHandle.equals(originalWindow)) {
+					driver.switchTo().window(windowHandle);
+					System.out.println("New window opened with title: " + driver.getTitle());
+				}
+			}
+
+			// 6. Close all the windows with a single command
+			driver.quit();
+		}
+	}
+
